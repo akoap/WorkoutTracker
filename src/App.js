@@ -1,12 +1,10 @@
 import './App.css';
-import React, { Component } from "react";
+import React from "react";
 import {
     BrowserRouter as Router, 
     Route, 
     Switch, 
-    Link, 
-    Redirect,
-    useLocation 
+    Redirect 
 } from "react-router-dom";
 
 // Pages
@@ -14,17 +12,12 @@ import MainPage from "./pages";
 import NotFound from "./pages/notFound";
 import About from "./pages/about";
 import SignupLogin from "./pages/signupLogin"
+import { Navbar } from './components/navbar';
 
 function App() {
     return (
         <Router>
-            <div>
-                <nav>
-                    <li><Link to="/">Home</Link></li>
-                    <li><Link to="/about">About</Link></li>
-                    <li><Link to="/signupLogin">Signup/Login</Link></li>
-                </nav>
-            </div>
+            <Navbar />
             <Switch>
                 <Route exact path="/" component={MainPage}></Route>
                 <Route exact path="/about" component={About}></Route>

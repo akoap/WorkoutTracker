@@ -1,9 +1,10 @@
 import React from "react";
+import { Box } from "./../components/box"
 
 const About = () => {
     return (
         <div>
-            <p>This is about the project</p>
+            <Box />
         </div>
     );
 }

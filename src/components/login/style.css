@@ -1,0 +1,44 @@
+.base-container {
+    background: rgb(49, 49, 49);
+    margin: 30px;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: fit-content;
+}
+
+.header {
+    font-weight: bold;
+    font-size: 30px;
+}
+
+.btn {
+    background: rgb(131, 131, 131);
+    border-radius: 15px;
+    border: none !important;
+    margin-bottom: 10px;
+}
+
+.btn:hover {
+    background-color: white;
+    color: rgb(49, 49, 49);
+}
+
+.btn:active {
+    background-color: black;
+    color: white;
+}
+
+input {
+    color:rgb(49, 49, 49);
+}
+
+.header {
+    margin-top: 10px;
+}
+
+.form-group {
+    margin: 10px;
+}

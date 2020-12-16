@@ -1,9 +1,10 @@
 import React from "react";
+import { Box } from "../components/box";
 
 const MainPage = () => {
     return (
-        <div className="Exercise">
-            <p>Hello</p>
+        <div>
+            <Box />
         </div>
     );
 }
