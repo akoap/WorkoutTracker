@@ -1,0 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
+
+
+/* Default settings for the site */
+* {
+    background-color: rgb(255, 59, 34);
+    font-family: Roboto Mono;
+}
