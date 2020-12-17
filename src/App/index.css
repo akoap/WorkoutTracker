@@ -6,3 +6,7 @@
     background-color: rgb(255, 59, 34);
     font-family: Roboto Mono;
 }
+
+body {
+    margin: 0;
+}
