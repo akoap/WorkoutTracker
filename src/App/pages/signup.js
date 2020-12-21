@@ -3,7 +3,7 @@ import SignUp from "../signUp/signUp"
 import { Container } from 'react-bootstrap';
 import { AuthProvider } from "../../contexts/AuthContext";
 
-const Register = () => {
+const Signup = () => {
     return (
         <AuthProvider>
             <Container className="d-flex align-items-center justify-content-center"
@@ -16,4 +16,4 @@ const Register = () => {
     );
 }
 
-export default Register;
+export default Signup;

@@ -6,7 +6,7 @@ export class Navbar extends React.Component {
         return (
             <div>
                 <nav>
-                    <Link to="/register">Register</Link>
+                    <Link to="/signup">Sign Up</Link>
                     <Link to="/login">Login</Link>
                     <Link to="/about">About</Link>
                     <Link to="/">Home</Link>
