@@ -10,7 +10,7 @@ nav a {
     float: right;
     color: #f2f2f2;
     text-align: center;
-    padding: 30px;
+    padding: 40px;
     text-decoration: none;
     background-color: black;
     font-weight: bold;
@@ -22,7 +22,10 @@ nav a:hover {
     color: rgb(0, 195, 255);
 }
 
-/* Fixes bullet point issue in navbar */
-li {
-    list-style-type:none;
+
+/* This is for the dropdown menu item */
+.NavDrop {
+    display: flex;
+    align-items: center;
+    float: right;
 }

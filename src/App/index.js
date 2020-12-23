@@ -1,5 +1,5 @@
 import './index.css';
-import React, { Component } from "react";
+import React from "react";
 import {
     BrowserRouter as Router, 
     Route, 
@@ -14,14 +14,15 @@ import Login from "./pages/login"
 import Signup from "./pages/signup"
 
 // Components
-import { Navbar } from './navbar';
+import Navbar from './navbar/navbar';
+import { AuthProvider } from '../contexts/AuthContext';
 
-
-class App extends Component {
-    render() {
+function App() {
         return (
             <Router>
-                <Navbar />
+                <AuthProvider>
+                    <Navbar />
+                </AuthProvider>
                 <Switch>
                     <Route exact path="/" component={Home}></Route>
                     <Route exact path="/about" component={About}></Route>
@@ -31,7 +32,7 @@ class App extends Component {
                 </Switch>
             </Router>
         );
-    }
+
 }
 
 export default App;
