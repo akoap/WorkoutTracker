@@ -9,29 +9,39 @@ import {
 // Pages
 import Home from "./pages";
 import NotFound from "./pages/notFound";
-import About from "./pages/about";
 import Login from "./pages/login"
 import Signup from "./pages/signup"
 
 // Components
 import Navbar from './navbar/navbar';
-import { AuthProvider } from '../contexts/AuthContext';
+import { useAuth } from '../contexts/AuthContext';
 
 function App() {
+    const { currentUser } = useAuth();
+    if (currentUser) {
         return (
             <Router>
-                <AuthProvider>
-                    <Navbar />
-                </AuthProvider>
+                <Navbar />
                 <Switch>
                     <Route exact path="/" component={Home}></Route>
-                    <Route exact path="/about" component={About}></Route>
                     <Route exact path="/login" component={Login}></Route>
                     <Route exact path="/signup" component={Signup}></Route>
                     <Route exact path="*" component={NotFound}></Route>
                 </Switch>
             </Router>
         );
+    }
+    return (
+        <Router>
+            <Navbar />
+            <Switch>
+                <Route exact path="/" component={Login}></Route>
+                <Route exact path="/login" component={Login}></Route>
+                <Route exact path="/signup" component={Signup}></Route>
+                <Route exact path="*" component={NotFound}></Route>
+            </Switch>
+        </Router>
+    );
 
 }
 

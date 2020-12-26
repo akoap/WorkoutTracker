@@ -1,12 +1,12 @@
 import React from "react";
+import { DBProvider } from "../../contexts/DBContext";
 import Exercises from "../exercises/exercises"
-import { AuthProvider } from './../../contexts/AuthContext';
 
-const Home = () => {
+function Home() {
     return (
-        <AuthProvider>
+        <DBProvider>
             <Exercises />
-        </AuthProvider>
+        </DBProvider>
     );
 }
 
