@@ -3,6 +3,7 @@ import './exercises.css';
 import { useAuth } from './../../contexts/AuthContext';
 import { useDB } from './../../contexts/DBContext';
 import { db } from './../../firebase';
+import { Redirect } from 'react-router-dom';
 
 export default function Exercises() {
     const { currentUser } = useAuth();
@@ -114,6 +115,7 @@ export default function Exercises() {
     } else {
         return (
             <>
+                <Redirect to="/login" />
             </>
         );
     }
