@@ -1,12 +1,15 @@
-import React from "react";
-import { DBProvider } from "../../contexts/DBContext";
-import Exercises from "../exercises/exercises"
+import React from 'react';
+import Exercises from '../exercises/exercises';
+import { AuthProvider } from './../../contexts/AuthContext';
+import { DBProvider } from './../../contexts/DBContext';
 
 function Home() {
     return (
-        <DBProvider>
-            <Exercises />
-        </DBProvider>
+        <AuthProvider>
+            <DBProvider>
+                <Exercises />
+            </DBProvider>
+        </AuthProvider>
     );
 }
 

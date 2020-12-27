@@ -14,17 +14,17 @@ export function DBProvider({ children }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const unsubscribe = db.collection('users').doc(currentUser.email).onSnapshot(doc => {
+        const unsubscribe = db.collection('users').doc(currentUser.uid).onSnapshot(doc => {
             setUserData(doc.data());
             setLoading(false);
         });
         return () => unsubscribe();
         // eslint-disable-next-line
-    }, [])
+    }, []);
     
     const value = {
         userData
-    }
+    };
 
     return (
         <DBContext.Provider value = { value }>
