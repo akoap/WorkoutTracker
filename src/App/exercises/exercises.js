@@ -3,119 +3,44 @@ import './exercises.css';
 import { useAuth } from './../../contexts/AuthContext';
 import { useDB } from './../../contexts/DBContext';
 import { db } from './../../firebase';
-import { Redirect } from 'react-router-dom';
 
 export default function Exercises() {
     const { currentUser } = useAuth();
     const { userData } = useDB();
-    if (!userData) {
-        const data = {
-            benchTM: 60,
-            squatTM: 60,
-            deadTM: 60,
-            latTM: 60,
-            cycle: 0,
-            week: 0,
-            primaryBench: {
-                type: "Bench Press",
-                weight: [30, 40, 50],
-                weightType: "lbs",
-                sets: 3,
-                reps: [5, 5, 5]
-            },
-            secondaryBench: {
-                type: "Bench Press",
-                weight: 20,
-                weightType: "lbs",
-                sets: 5,
-                reps: 10
-            },
-            primaryDead: {
-                type: "Deadlift",
-                weight: [20, 30, 40],
-                weightType: "lbs",
-                sets: 3,
-                reps: [5, 5, 5]
-            },
-            secondaryDead: {
-                type: "Deadlift",
-                weight: 20,
-                weightType: "lbs",
-                sets: 5,
-                reps: 10
-            },
-            primarySquat: {
-                type: "Squat",
-                weight: [20, 30, 40],
-                weightType: "lbs",
-                sets: 3,
-                reps: [5, 5, 5]
-            },
-            secondarySquat: {
-                type: "Squat",
-                weight: 20,
-                weightType: "lbs",
-                sets: 5,
-                reps: 10
-            },
-            latWork: {
-                type: "Lat Work",
-                weight: 20,
-                weightType: "lbs",
-                sets: 5,
-                reps: 10
-            },
-            abs: {
-                type: "Abs",
-                weight: "Crunches",
-                weightType: "",
-                sets: 5,
-                reps: 10
-            },
-            createdAt: new Date()
-        };
-        db.collection('users').doc(currentUser.uid).set(data);
-    }
-    updatePrimaryWorkout(userData, currentUser);
+    
+    init(userData, currentUser)
+    let workoutMat = updateWorkout(userData);
     let workout = getWorkout(userData, currentUser);
 
-    if (currentUser) {
-        if (workout) {
-            return (
-                <>
-                    <div className="Box">
-                        <h3>{getHeader(updateTime())}</h3>
-                    </div>
-                    <div className="Box">
-                        <h3>{workout[0].type}: </h3>
-                        <br />
-                        <p>{workout[0].sets} x {workout[0].reps} with {workout[0].weight[0]}, {workout[0].weight[1]}, {workout[0].weight[2]} {workout[0].weightType}</p>
-                    </div>
-                    <div className="Box">
-                        <h3>{workout[1].type}: </h3>
-                        <br />
-                        <p>{workout[1].sets} x {workout[1].reps} with {workout[1].weight} {workout[1].weightType}</p>
-                    </div>
-                    <div className="Box">
-                        <h3>{workout[2].type}: </h3>
-                        <br />
-                        <p>{workout[2].sets} x {workout[2].reps} with {workout[2].weight} {workout[2].weightType}</p>
-                    </div>
-                </>
-            );
-        } else {
-            return (
-                <>
-                    <div className="Box">
-                        <h3>No workout for today, relax!</h3>
-                    </div>
-                </>
-            );
-        }
+    if (workout) {
+        return (
+            <>
+                <div className="Box">
+                    <h3>{getHeader(updateTime())}</h3>
+                </div>
+                <div className="Box">
+                    <h3>{workout[0][0].type}: </h3>
+                    <br />
+                    <p>3 x {workoutMat[1]} with {workout[0][1] * workoutMat[0][0]}, {workout[0][1] * workoutMat[0][1]}, {workout[0][1] * workoutMat[0][2]} {workout[0][0].weightType}</p>
+                </div>
+                <div className="Box">
+                    <h3>{workout[1][0].type}: </h3>
+                    <br />
+                    <p>5 x 10 with {workout[1][1] * workoutMat[2]} {}</p>
+                </div>
+                <div className="Box">
+                    <h3>{workout[2][0].type}: </h3>
+                    <br />
+                    <p>5 x 10 with {workout[2][1] * workoutMat[2]} {workout[2][0].weightType}</p>
+                </div>
+            </>
+        );
     } else {
         return (
             <>
-                <Redirect to="/login" />
+                <div className="Box">
+                    <h3>No workout for today, relax!</h3>
+                </div>
             </>
         );
     }
@@ -202,27 +127,51 @@ function getHeader(time) {
     return 'Here is your workout for ' + day + ', ' + month + ' ' + date;
 }
 
-function getWorkout(userData, currentUser) {
+function getWorkout(userData) {
     let workout;
     let difference = getDateDifference(userData);
 
+    const primaryBench = {
+        type: "Bench Press",
+        weightType: "lbs"
+    };
+    const secondaryBench = {
+        type: "Bench Press",
+        weightType: "lbs"
+    };
+    const primaryDead = {
+        type: "Deadlift",
+        weightType: "lbs"
+    };
+    const secondaryDead = {
+        type: "Deadlift",
+        weightType: "lbs",
+    };
+    const primarySquat = {
+        type: "Squat",
+        weightType: "lbs",
+    };
+    const secondarySquat = {
+        type: "Squat",
+        weightType: "lbs",
+    };
+    const latWork = {
+        type: "Lat Work",
+        weightType: "lbs",
+    };
+    const abs = {
+        type: "Abs",
+        weightType: "Crunches",
+    };
+
     if (difference % 8 === 0) {
-        workout = [userData.primarySquat, userData.secondaryDead, userData.abs];
+        workout = [[primarySquat, userData.squatTM], [secondaryDead, userData.deadTM], [abs, userData.absTM]];
     } else if (difference % 6 === 0) {
-        workout = [userData.primaryBench, userData.secondaryBench, userData.latWork];
+        workout = [[primaryBench, userData.benchTM], [secondaryBench, userData.benchTM], [latWork, userData.latTM]];
     } else if (difference % 4 === 0) {
-        workout = [userData.primaryDead, userData.secondarySquat, userData.abs];
+        workout = [[primaryDead, userData.deadTM], [secondarySquat, userData.squatTM], [abs, userData.absTM]];
     } else if (difference % 2 === 0) {
-        workout = [userData.primaryBench, userData.secondaryBench, userData.latWork];
-        db.collection('users').doc(currentUser.uid).update({
-            week: userData.week
-        });
-        if (userData.week % 3 === 0) {
-            db.collection('users').doc(currentUser.uid).update({
-                cycle: userData.cycle
-            });
-        }
-        console.log('h')
+        workout = [[primaryBench, userData.benchTM], [secondaryBench, userData.benchTM], [latWork, userData.latTM]];
     }
     
     return workout;
@@ -231,98 +180,51 @@ setInterval(getWorkout, 86400000);
 
 function getDateDifference(userData) {
     let today = updateTime();
-    let difference = Math.ceil((Math.abs(today - userData.createdAt + (8 * 864000000000))) / (1000 * 60 * 60 * 24 * 10000)); 
+    let difference = Math.ceil((Math.abs(today - userData.createdAt)) / (1000 * 60 * 60 * 24 * 10000)); 
     return difference;
 }
 setInterval(getWorkout, 86400000);
 
-function updatePrimaryWorkout(userData, currentUser) {
-    let weightP = [1, 1, 1];
-    let weightS = 1;
-    let repNum = userData.primaryBench.reps;
-    if (userData.week % 3 === 0) {
-        weightP = [.65, .75, .85];
-        repNum = [5, 5, 5];
-    } else if (userData.week % 3 === 1) {
-        weightP = [.7, .8, .9];
-        repNum = [3, 3, 3];
-    } else if (userData.week % 3 === 2) {
-        weightP = [.75, .85, .95];
-        repNum = [5, 3, 1];
+function updateWorkout(userData) {
+    const difference = getDateDifference(userData);
+    const week = Math.floor(difference / 7);
+    const cycle = Math.floor(difference / 3);
+    let primaryPer = [.65, .75, .85];
+    let primaryRep = [5, 5, 5];
+    let secondaryPer = .3;
+    if (week % 3 === 0) {
+        primaryPer = [.65, .75, .85];
+        primaryRep = [5, 5, 5];
+    } else if (week % 3 === 1) {
+        primaryPer = [.7, .8, .9];
+        primaryRep = [3, 3, 3];
+    } else {
+        primaryPer = [.75, .85, .95];
+        primaryRep = [5, 3, 1];
     }
 
-    if (userData.cycle % 3 === 0) {
-        weightS = .3;
-        db.collection('users').doc(currentUser.uid).update({
-            benchTM: userData.benchTM,
-            squatTM: userData.squatTM,
-            deadTM: userData.deadTM
-        });
-    } else if (userData.cycle % 3 === 1) {
-        weightS = .45;
-        db.collection('users').doc(currentUser.uid).update({
-            benchTM: userData.benchTM,
-            squatTM: userData.squatTM,
-            deadTM: userData.deadTM
-        });
-    } else if (userData.cycle % 3 === 2) {
-        weightS = .6;
-        db.collection('users').doc(currentUser.uid).update({
-            benchTM: userData.benchTM,
-            squatTM: userData.squatTM,
-            deadTM: userData.deadTM
-        });
+    if (cycle % 3 === 0) {
+        secondaryPer = .3
+    } else if (cycle % 3 === 1) {
+        secondaryPer = .45
+    } else {
+        secondaryPer = .6
     }
-    db.collection('users').doc(currentUser.uid).update({
-        primaryBench: {
-            type: "Bench Press",
-            weight: [userData.benchTM * weightP[0], userData.benchTM * weightP[1], userData.benchTM * weightP[2]],
-            weightType: "lbs",
-            sets: 3,
-            reps: repNum
-        },
-        secondaryBench: {
-            type: "Bench Press",
-            weight: userData.benchTM * weightS,
-            weightType: "lbs",
-            sets: 5,
-            reps: 10
-        },
-        primaryDead: {
-            type: "Deadlift",
-            weight: [userData.deadTM * weightP[0], userData.deadTM * weightP[1], userData.deadTM * weightP[2]],
-            weightType: "lbs",
-            sets: 3,
-            reps: repNum            
-        },
-        secondaryDead: {
-            type: "Deadlift",
-            weight: userData.deadTM * weightS,
-            weightType: "lbs",
-            sets: 5,
-            reps: 10
-        },
-        primarySquat: {
-            type: "Squat",
-            weight: [userData.squatTM * weightP[0], userData.squatTM * weightP[1], userData.squatTM * weightP[2]],
-            weightType: "lbs",
-            sets: 3,
-            reps: repNum
-        },
-        secondarySquat: {
-            type: "Squat",
-            weight: userData.squatTM * weightS,
-            weightType: "lbs",
-            sets: 5,
-            reps: 10
-        },
-        latWork: {
-            type: "Lat Work",
-            weight: userData.latTM * weightS,
-            weightType: "lbs",
-            sets: 5,
-            reps: 10
-        },
-    });
+    
+    return [primaryPer, primaryRep, secondaryPer];
 }
 setInterval(getWorkout, 86400000);
+
+function init(userData, currentUser) {
+    if (!userData) {
+        const data = {
+            benchTM: 60,
+            squatTM: 60,
+            deadTM: 60,
+            latTM: 60,
+            absTM: 0,
+            createdAt: new Date()
+        };
+        db.collection('users').doc(currentUser.uid).set(data);
+    }
+}
