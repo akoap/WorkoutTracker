@@ -181,7 +181,7 @@ setInterval(getWorkout, 86400000);
 
 function getDateDifference(userData) {
     let today = updateTime();
-    let difference = Math.ceil((Math.abs(today - userData.createdAt + (21*864000000000))) / (1000 * 60 * 60 * 24 * 10000)); 
+    let difference = Math.ceil((Math.abs(today - userData.createdAt + (0*864000000000))) / (1000 * 60 * 60 * 24 * 10000)); 
     return difference;
 }
 setInterval(getWorkout, 86400000);
@@ -232,16 +232,22 @@ function init(userData, currentUser) {
 
 function updateWeights(userData, currentUser) {
     const difference = getDateDifference(userData);
-    console.log(difference)
-    /*
+    console.log(difference);
+    let weights = [60, 60, 60, 60]
+    
     if (difference % 22 === 0) {
-        db.collection('users').doc(currentUser.uid).update({
-            benchTM: userData.benchTM + 5,
-            squatTM: userData.benchTM + 10,
-            deadTM: userData.benchTM + 10,
-            latTM: userData.benchTM + 10,
-        });
+        weights[0] += 5;
+        weights[1] += 10;
+        weights[2] += 10;
+        weights[3] += 10;
     }
-    */
+
+    db.collection('users').doc(currentUser.uid).update({
+        benchTM: weights[0],
+        squatTM: weights[1],
+        deadTM: weights[2],
+        latTM: weights[3]
+    });
+    
 }
 setInterval(updateWeights, 86400000);
