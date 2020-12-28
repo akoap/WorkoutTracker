@@ -11,6 +11,7 @@ export default function Exercises() {
     init(userData, currentUser)
     let workoutMat = updateWorkout(userData);
     let workout = getWorkout(userData, currentUser);
+    updateWeights(userData, currentUser);
 
     if (workout) {
         return (
@@ -26,7 +27,7 @@ export default function Exercises() {
                 <div className="Box">
                     <h3>{workout[1][0].type}: </h3>
                     <br />
-                    <p>5 x 10 with {workout[1][1] * workoutMat[2]} {}</p>
+                    <p>5 x 10 with {workout[1][1] * workoutMat[2]} {workout[1][0].weightType}</p>
                 </div>
                 <div className="Box">
                     <h3>{workout[2][0].type}: </h3>
@@ -180,7 +181,7 @@ setInterval(getWorkout, 86400000);
 
 function getDateDifference(userData) {
     let today = updateTime();
-    let difference = Math.ceil((Math.abs(today - userData.createdAt)) / (1000 * 60 * 60 * 24 * 10000)); 
+    let difference = Math.ceil((Math.abs(today - userData.createdAt + (21*864000000000))) / (1000 * 60 * 60 * 24 * 10000)); 
     return difference;
 }
 setInterval(getWorkout, 86400000);
@@ -204,11 +205,11 @@ function updateWorkout(userData) {
     }
 
     if (cycle % 3 === 0) {
-        secondaryPer = .3
+        secondaryPer = .3;
     } else if (cycle % 3 === 1) {
-        secondaryPer = .45
+        secondaryPer = .45;
     } else {
-        secondaryPer = .6
+        secondaryPer = .6;
     }
     
     return [primaryPer, primaryRep, secondaryPer];
@@ -228,3 +229,19 @@ function init(userData, currentUser) {
         db.collection('users').doc(currentUser.uid).set(data);
     }
 }
+
+function updateWeights(userData, currentUser) {
+    const difference = getDateDifference(userData);
+    console.log(difference)
+    /*
+    if (difference % 22 === 0) {
+        db.collection('users').doc(currentUser.uid).update({
+            benchTM: userData.benchTM + 5,
+            squatTM: userData.benchTM + 10,
+            deadTM: userData.benchTM + 10,
+            latTM: userData.benchTM + 10,
+        });
+    }
+    */
+}
+setInterval(updateWeights, 86400000);
