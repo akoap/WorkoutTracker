@@ -48,7 +48,7 @@ export default function Exercises() {
 }
 
 function updateTime() {
-    let currentTime = new Date();
+    let currentTime = new Date(new Date().toDateString());
     return currentTime;
 }
 setInterval(updateTime, 86400000);
@@ -180,8 +180,8 @@ function getWorkout(userData) {
 setInterval(getWorkout, 86400000);
 
 function getDateDifference(userData) {
-    let today = updateTime();
-    let difference = Math.ceil((Math.abs(today - userData.createdAt + (0*864000000000))) / (1000 * 60 * 60 * 24 * 10000)); 
+    let today = updateTime()
+    let difference = Math.ceil((today - userData.createdAt.toMillis()) / (1000 * 60 * 60 * 24));
     return difference;
 }
 setInterval(getWorkout, 86400000);
@@ -189,7 +189,7 @@ setInterval(getWorkout, 86400000);
 function updateWorkout(userData) {
     const difference = getDateDifference(userData);
     const week = Math.floor(difference / 7);
-    const cycle = Math.floor(difference / 3);
+    const cycle = Math.floor(week / 3);
     let primaryPer = [.65, .75, .85];
     let primaryRep = [5, 5, 5];
     let secondaryPer = .3;
@@ -203,10 +203,10 @@ function updateWorkout(userData) {
         primaryPer = [.75, .85, .95];
         primaryRep = [5, 3, 1];
     }
-
-    if (cycle % 3 === 0) {
+    console.log(cycle)
+    if (cycle / 3 === 0) {
         secondaryPer = .3;
-    } else if (cycle % 3 === 1) {
+    } else if (cycle / 3 === 1) {
         secondaryPer = .45;
     } else {
         secondaryPer = .6;
@@ -224,7 +224,7 @@ function init(userData, currentUser) {
             deadTM: 60,
             latTM: 60,
             absTM: 0,
-            createdAt: new Date()
+            createdAt: new Date(new Date().toDateString())
         };
         db.collection('users').doc(currentUser.uid).set(data);
     }
@@ -232,7 +232,6 @@ function init(userData, currentUser) {
 
 function updateWeights(userData, currentUser) {
     const difference = getDateDifference(userData);
-    console.log(difference);
     let weights = [60, 60, 60, 60]
     
     if (difference % 22 === 0) {
